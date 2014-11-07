@@ -1,0 +1,8 @@
+body .navbar {
+  margin-bottom: 0px;
+}
+body .notificaciones {
+  height: 60px;
+  background-color: #f0f0f0;
+  padding: 15px;
+}
