@@ -5,7 +5,9 @@ class UsuariosController extends \BaseController {
 	protected $layout = 'layouts.master';
 
 	public function registrar(){
-		$this->layout->modulo = View::make('usuarios.registrar');
+		$oficionas = DB::table('oficinas')->orderBy('oficina')->lists('oficina','id');
+
+		$this->layout->modulo = View::make('usuarios.registrar', array('oficina' => $oficinas));
 	}
 	/**
 	 * Display a listing of the resource.
@@ -89,3 +91,4 @@ class UsuariosController extends \BaseController {
 
 
 }
+?>

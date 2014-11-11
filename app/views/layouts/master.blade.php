@@ -20,5 +20,6 @@
 			<div class="twelve columns"></div>
 		</div>
 	</div>
+	@yield('modulo')
 </body>
 </html> 
