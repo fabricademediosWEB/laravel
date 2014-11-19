@@ -37,11 +37,14 @@ class CrearTablaUsuarios extends Migration {
 			$table->string('email',62);
 
 			//Password
-			$table->string('password',16);
+			$table->string('password',32);
 
 			//Nombre y apellido
 			$table->string('nombre', 30);		
 			$table->string('apellido', 30);
+
+			//llave de validación
+			$table->string('random', 13);
 		});
 	}
 

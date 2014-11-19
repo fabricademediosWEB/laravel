@@ -28,3 +28,6 @@ Route::get('usuario/{id}', function($id){
 	->where('id','[0-9]+');
 
 Route::get('registrar', 'UsuariosController@registrar');
+Route::get('activar/{random}', 'UsuariosController@activar');
+Route::get('acceder', 'UsuariosController@acceder');
+Route::post('registrar', 'UsuariosController@registrar_bd');
