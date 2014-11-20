@@ -5,7 +5,7 @@
 				Validar usuarios
 			</div>
 			<div class="contenido">
-				{{ Form::open() }}
+				{{ Form::open(array('url' => 'validar')) }}
 					<ul>
 						<li class="field">
 							{{Form::email('email',null,array(

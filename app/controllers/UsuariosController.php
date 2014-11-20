@@ -76,6 +76,48 @@ class UsuariosController extends \BaseController {
 		$this->layout->notificacion = "Modulo de usuarios, validacion";
 		$this->layout->modulo = View::make('usuarios.acceder');
 	}
+
+	public function validar()
+	{
+		$data = Input::all();
+
+		//reglas validaciones
+		$reglas = array(
+			'email'		=> 'required',
+			'password'	=> 'required|min:8'
+		);
+
+		$validation = validator::make($data,$reglas);
+
+		if($validation->fails()){
+			echo "Error de validacion";
+		}else{
+			$usuarios = new UsuariosModel;
+
+			$email=Input::get('email');
+			$password=Input::get('password');
+
+			$datosUsuarioLogin = 
+				$usuarios->
+				where('email','=',$email)->
+				where('password','=',md5($password))->first();
+
+			if(!$datosUsuarioLogin){
+				echo "Usuario no registrado";
+			}else{
+				if($datosUsuarioLogin->id_estado == 1) {
+					echo "Es necesario que active la cuenta"; 
+				}
+				elseif ($datosUsuarioLogin->id_estado == 3) {
+					echo "Su cuenta ha sido eliminada";
+				}
+				else{
+					echo "Bienvenido al sistema de administración de usuarios"; 
+				}
+			}
+
+		}
+	}
 	/**
 	 * Display a listing of the resource.
 	 *

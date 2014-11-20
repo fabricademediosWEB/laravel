@@ -30,4 +30,5 @@ Route::get('usuario/{id}', function($id){
 Route::get('registrar', 'UsuariosController@registrar');
 Route::get('activar/{random}', 'UsuariosController@activar');
 Route::get('acceder', 'UsuariosController@acceder');
+Route::post('validar', 'UsuariosController@validar');
 Route::post('registrar', 'UsuariosController@registrar_bd');
