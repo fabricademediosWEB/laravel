@@ -45,6 +45,7 @@ class UsuariosController extends \BaseController {
 		);
 
 		if(!$usuarios->validator($data)){
+			$this->layout->notificacion = '123412341234';
 			$this->layout->modelo = View::make('mensaje', array('encabezado' => 'Advertencia :', 'cuerpo' => $usuarios->showErrors()));
 		}else{
 			$usuarios->save();
@@ -61,7 +62,7 @@ class UsuariosController extends \BaseController {
 				$message->to($this->email,$this->nombreCompleto)->subject('Bienvenido');
 			});
 
-			$this->layout->notificacion = "Se ha enviado un correo electronico, para la activación de su cuenta";
+			$this->layout->notificacion = 'Se ha enviado un correo electronico, para la activación de su cuenta';
 		}
 	}
 
@@ -87,10 +88,25 @@ class UsuariosController extends \BaseController {
 			'password'	=> 'required|min:8'
 		);
 
-		$validation = validator::make($data,$reglas);
+		$mensajes = array(
+			'email.required' => 'El campo email es un campo requerido',
+			'password.min'	=> 'El password es incorrecto',
+			'password.required' => 'El password es un campo obligatorio'
+		);
+
+		$validation = Validator::make($data, $reglas, $mensajes);
 
 		if($validation->fails()){
-			echo "Error de validacion";
+			$mensajes = $validation->messages()->all();
+
+			$this->showErrores('Advertncia', $mensajes)
+
+			$this->layout->modelo = View::make('mensaje', array(
+				'encabezado'	=> 'Advertencia:',
+				'cuerpo'		=> $errors	
+			));
+
+			$this->layout->notificacion = "hola";
 		}else{
 			$usuarios = new UsuariosModel;
 
@@ -103,20 +119,37 @@ class UsuariosController extends \BaseController {
 				where('password','=',md5($password))->first();
 
 			if(!$datosUsuarioLogin){
-				echo "Usuario no registrado";
+				
+				$this->showErrores('La cuenta:','No existe, por favor cree una nueva.')
+				$this->layout->notificacion = 'lo que sea';
 			}else{
 				if($datosUsuarioLogin->id_estado == 1) {
-					echo "Es necesario que active la cuenta"; 
+
+					$this->layout->notificacion = "Su cuenta ha sido eliminada";
+					$this->showErrores('Advertencia','Su cuenta no ha sido activada'); 
 				}
 				elseif ($datosUsuarioLogin->id_estado == 3) {
-					echo "Su cuenta ha sido eliminada";
+					$this->layout->notificacion = "Su cuenta ha sido eliminada";
+					$this->showErrores('Eliminado','Su cuenta ha sido eliminada, Cree una nueva.');
 				}
 				else{
-					echo "Bienvenido al sistema de administración de usuarios"; 
+					$this->layout->notificacion = "Bienvenido al sistema de administración de usuarios"; 
 				}
 			}
 
 		}
+	}
+
+	public function showErrores($encabezado, $mensajes)
+	{
+		if(!is_array($mensajes)){
+			$mensaje = array('mensaje' => $mensajes);
+		}
+		
+		$this->layout->modulo = View::make('mensaje', array(
+			'encabezado' => $encabezado,
+			'cuerpo' => $mensaje
+		));
 	}
 	/**
 	 * Display a listing of the resource.
